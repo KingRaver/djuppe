@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/components/SiteFooter";
 import { site } from "@/data/site";
 
 export function ContactSection() {
@@ -16,11 +17,7 @@ export function ContactSection() {
           <div>Signal<br /><a href={site.instagram}>{site.instagramLabel}</a></div>
           <div>Availability<br />{site.availability}</div>
         </div>
-        <footer className="site-footer mono">
-          <span>DJUPPE / Metal, given intent</span>
-          <span>Objects carry the record of their making.</span>
-          <span>© {new Date().getFullYear()}</span>
-        </footer>
+        <SiteFooter />
       </div>
     </section>
   );

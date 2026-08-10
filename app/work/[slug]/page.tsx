@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { SiteFooter } from "@/components/SiteFooter";
 import { ProjectMedia } from "@/components/ui/ProjectMedia";
 import { getProject, projects } from "@/data/projects";
 
@@ -50,6 +51,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <main id="main-content" className="project-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <header className="project-page-hero container-wide">
+        <Link className="project-back mono" href="/#work">
+          <span aria-hidden="true">↖</span> Works register
+        </Link>
         <h1 className="project-page-title display">{project.title}</h1>
         <div className="project-page-meta mono">
           <div>Object / Year<span>{project.number} / {project.year}</span></div>
@@ -60,7 +64,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </header>
 
       <section className="project-lead-media" aria-label={`${project.title} overview`}>
-        <ProjectMedia visual={project.images[0]} priority label={`${project.number} / GENERAL VIEW`} />
+        <ProjectMedia visual={project.images[0]} priority sizes="100vw" label={`${project.number} / GENERAL VIEW`} />
       </section>
 
       <section className="project-story container" aria-labelledby="project-statement">
@@ -79,7 +83,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       <section className="project-gallery container-wide" aria-label={`${project.title} details`}>
         {project.images.slice(1).map((visual, index) => (
-          <ProjectMedia key={`${visual.variant}-${index}`} visual={visual} label={`DETAIL / ${String(index + 1).padStart(2, "0")}`} />
+          <ProjectMedia
+            key={`${visual.variant}-${index}`}
+            visual={visual}
+            sizes="(max-width: 560px) 100vw, 50vw"
+            label={`DETAIL / ${String(index + 1).padStart(2, "0")}`}
+          />
         ))}
       </section>
 
@@ -90,6 +99,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <span aria-hidden="true">↗</span>
         </div>
       </Link>
+
+      <div className="project-page-footer">
+        <div className="container-wide"><SiteFooter /></div>
+      </div>
     </main>
   );
 }

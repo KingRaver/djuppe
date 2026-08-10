@@ -2,17 +2,22 @@
 
 import { Edges } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
+import type { MotionValue } from "motion/react";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
+type Pointer = { x: MotionValue<number>; y: MotionValue<number> };
+
 type ForgeSceneProps = {
-  pointer: { x: number; y: number };
+  pointer: Pointer;
+  active?: boolean;
+  onReady?: () => void;
 };
 
-function CameraRig({ pointer }: ForgeSceneProps) {
+function CameraRig({ pointer }: { pointer: Pointer }) {
   useFrame((state, delta) => {
-    const targetX = pointer.x * 0.3;
-    const targetY = pointer.y * 0.16;
+    const targetX = pointer.x.get() * 0.3;
+    const targetY = pointer.y.get() * 0.16;
     state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, targetX, 3.2, delta);
     state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, targetY, 3.2, delta);
     state.camera.lookAt(0, 0, 0);
@@ -21,7 +26,7 @@ function CameraRig({ pointer }: ForgeSceneProps) {
   return null;
 }
 
-function ForgedRibbon({ pointer }: ForgeSceneProps) {
+function ForgedRibbon({ pointer }: { pointer: Pointer }) {
   const group = useRef<THREE.Group>(null);
   const hotLight = useRef<THREE.PointLight>(null);
 
@@ -61,9 +66,11 @@ function ForgedRibbon({ pointer }: ForgeSceneProps) {
 
   useFrame((state, delta) => {
     if (!group.current) return;
+    const pointerX = pointer.x.get();
+    const pointerY = pointer.y.get();
     group.current.rotation.y += delta * 0.055;
-    group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, -0.18 + pointer.y * 0.13, 2.5, delta);
-    group.current.rotation.z = THREE.MathUtils.damp(group.current.rotation.z, -0.13 + pointer.x * 0.07, 2.5, delta);
+    group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, -0.18 + pointerY * 0.13, 2.5, delta);
+    group.current.rotation.z = THREE.MathUtils.damp(group.current.rotation.z, -0.13 + pointerX * 0.07, 2.5, delta);
     if (hotLight.current) {
       hotLight.current.position.x = Math.sin(state.clock.elapsedTime * 0.28) * 4;
       hotLight.current.position.y = Math.cos(state.clock.elapsedTime * 0.21) * 2;
@@ -98,13 +105,15 @@ function ForgedRibbon({ pointer }: ForgeSceneProps) {
   );
 }
 
-export default function ForgeScene({ pointer }: ForgeSceneProps) {
+export default function ForgeScene({ pointer, active = true, onReady }: ForgeSceneProps) {
   return (
     <Canvas
       camera={{ position: [0, 0, 10.2], fov: 42 }}
       dpr={[1, 1.5]}
+      frameloop={active ? "always" : "never"}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       shadows
+      onCreated={() => onReady?.()}
     >
       <ambientLight intensity={0.42} color="#8b9296" />
       <directionalLight position={[-5, 6, 6]} intensity={3.2} color="#e7edf0" castShadow />

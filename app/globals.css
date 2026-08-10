@@ -56,10 +56,20 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Ember clears 3:1 against both the furnace-black and the four bone-white sections;
+   the old white ring disappeared entirely on the light ones. */
 :focus-visible {
-  outline: 1px solid var(--white);
-  outline-offset: 5px;
-  box-shadow: 0 0 0 2px var(--ember);
+  outline: 2px solid var(--ember);
+  outline-offset: 4px;
+}
+
+/* The fixed header would otherwise sit on top of whatever an in-page link lands on. */
+[id="work"],
+[id="process"],
+[id="about"],
+[id="contact"],
+[id="main-content"] {
+  scroll-margin-top: 96px;
 }
 
 .site-shell {
@@ -76,6 +86,9 @@ a {
   content: "";
   opacity: 0.09;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  /* Without an explicit size the viewBox-only SVG stretches across the whole viewport
+     and reads as smeared blur rather than grain. */
+  background-size: 160px 160px;
   mix-blend-mode: soft-light;
 }
 
@@ -99,7 +112,7 @@ a {
 
 .mono {
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   letter-spacing: 0.09em;
   line-height: 1.5;
   text-transform: uppercase;
@@ -111,7 +124,7 @@ a {
   gap: 0.7rem;
   color: #9fa5a4;
   font-family: var(--mono);
-  font-size: 0.64rem;
+  font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -160,7 +173,7 @@ a {
   align-items: center;
   gap: clamp(1.2rem, 2.4vw, 2.8rem);
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: 0.66rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -182,9 +195,18 @@ a {
 }
 
 .nav-links a:hover::after,
-.nav-links a:focus-visible::after {
+.nav-links a:focus-visible::after,
+.nav-links a[aria-current]::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+.nav-links a[aria-current]::after {
+  opacity: 0.55;
+}
+
+.nav-links a[aria-current]:hover::after {
+  opacity: 1;
 }
 
 .workshop-status {
@@ -193,7 +215,7 @@ a {
   align-items: center;
   gap: 0.55rem;
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: 0.64rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -208,6 +230,42 @@ a {
 
 .menu-toggle {
   display: none;
+}
+
+/* Defined outside the breakpoint on purpose: the panel is React state, so a resize while it
+   is open must not leave an unstyled list of links floating over the page. */
+.mobile-menu {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 100px 16px 34px;
+  background: #d9d9d4;
+  color: #101213;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 0.5rem 0;
+  border-top: 1px solid rgb(0 0 0 / 25%);
+  font-family: var(--display);
+  font-size: clamp(3.8rem, 19vw, 7rem);
+  font-weight: 620;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.mobile-menu a[aria-current] {
+  color: #6d4327;
+}
+
+.mobile-menu-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
 }
 
 .hero {
@@ -241,6 +299,12 @@ a {
   inset: 10% -4% 7% 22%;
   opacity: 0.82;
   filter: drop-shadow(0 40px 80px black);
+  transition: opacity 1100ms cubic-bezier(.16, 1, .3, 1);
+}
+
+/* The forge canvas is alpha-transparent, so the static ribbon has to leave once it is live. */
+.hero-static[data-dimmed="true"] {
+  opacity: 0;
 }
 
 .hero-static path {
@@ -289,7 +353,13 @@ a {
   text-transform: uppercase;
 }
 
-.hero-copy p {
+/* The kicker is also a <p>; without the exclusion it inherited body size and colour here
+   and rendered at roughly 16px, unlike every other section kicker on the site. */
+.hero-copy .section-kicker {
+  margin: 0 0 1.1rem;
+}
+
+.hero-copy p:not(.section-kicker) {
   max-width: 34ch;
   margin: 1.5rem 0 0;
   color: #b9bdbc;
@@ -572,18 +642,35 @@ a {
   border-top: 1px solid rgb(0 0 0 / 25%);
 }
 
+/* These rows animate transform, not padding: padding reflows the whole register on every frame. */
 .works-index-list a {
   display: grid;
   grid-template-columns: 60px 1fr auto;
   align-items: center;
   padding: 1.5rem 0;
   border-bottom: 1px solid rgb(0 0 0 / 18%);
-  transition: padding 350ms cubic-bezier(.16, 1, .3, 1), background 350ms ease;
+  transition: background 350ms ease;
 }
 
-.works-index-list a:hover {
-  padding-inline: 1rem;
+.works-index-list a > * {
+  transition: transform 400ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.works-index-list a:hover,
+.works-index-list a:focus-visible {
   background: rgb(255 255 255 / 42%);
+}
+
+.works-index-list a:hover span:first-child,
+.works-index-list a:hover strong,
+.works-index-list a:focus-visible span:first-child,
+.works-index-list a:focus-visible strong {
+  transform: translateX(14px);
+}
+
+.works-index-list a:hover span:last-child,
+.works-index-list a:focus-visible span:last-child {
+  transform: translateX(-8px);
 }
 
 .works-index-list strong {
@@ -613,6 +700,7 @@ a {
   pointer-events: none;
   opacity: 0.22;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
   mix-blend-mode: overlay;
 }
 
@@ -631,9 +719,9 @@ a {
   right: 18px;
   padding: 6px 8px;
   border: 1px solid rgb(255 255 255 / 28%);
-  color: rgb(255 255 255 / 65%);
+  color: rgb(255 255 255 / 72%);
   font-family: var(--mono);
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   letter-spacing: 0.08em;
 }
 
@@ -806,9 +894,29 @@ a {
 .specimen-axis-y { top: 0; left: 50%; width: 1px; height: 100%; }
 
 .material-stages {
+  position: relative;
   margin-top: 18vh;
 }
 
+/* The stage backdrop swings from near-black to near-white; this keeps the reading column
+   on a known surface instead of letting contrast follow the gradient. */
+.material-stages::before {
+  position: absolute;
+  z-index: -1;
+  inset: -5vh -6vw;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgb(10 12 13 / 0%),
+    rgb(10 12 13 / 88%) 9%,
+    rgb(10 12 13 / 88%) 91%,
+    rgb(10 12 13 / 0%)
+  );
+}
+
+/* Inactive stages are colour-stepped rather than opacity-dimmed: the old 0.38 opacity
+   put body copy at roughly 2:1 against the section background. */
 .material-stage {
   display: grid;
   grid-template-columns: 58px 1fr;
@@ -816,38 +924,48 @@ a {
   min-height: 25vh;
   padding: 1.6rem 0;
   border-top: 1px solid var(--line);
-  opacity: 0.38;
-  transition: opacity 350ms ease, transform 600ms cubic-bezier(.16, 1, .3, 1);
-  width: 100%;
-  border-right: 0;
-  border-bottom: 0;
-  border-left: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+  transition: border-color 350ms ease, transform 600ms cubic-bezier(.16, 1, .3, 1);
 }
 
 .material-stage.is-active {
-  opacity: 1;
+  border-top-color: rgb(228 177 138 / 55%);
   transform: translateX(-16px);
+}
+
+.material-stage-index {
+  color: #878d8c;
+  transition: color 350ms ease;
+}
+
+.material-stage.is-active .material-stage-index {
+  color: #e4b18a;
 }
 
 .material-stage h3 {
   margin: 0;
+  color: #6f7574;
   font-family: var(--display);
   font-size: clamp(3rem, 6vw, 6rem);
   font-weight: 580;
   letter-spacing: -0.03em;
   line-height: 0.9;
   text-transform: uppercase;
+  transition: color 350ms ease;
+}
+
+.material-stage.is-active h3 {
+  color: var(--white);
 }
 
 .material-stage p {
   max-width: 40ch;
-  color: #adb2b1;
+  color: #9aa09f;
   line-height: 1.65;
+  transition: color 350ms ease;
+}
+
+.material-stage.is-active p {
+  color: #c3c8c7;
 }
 
 .process-section {
@@ -907,27 +1025,23 @@ a {
 .process-steps {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  margin: 0;
+  padding: 0;
   border-top: 1px solid rgb(0 0 0 / 30%);
+  list-style: none;
 }
 
+/* Same reasoning as the material stages: colour step, not 0.42 opacity. */
 .process-step {
   min-width: 0;
   padding: 1rem 0.6rem 1rem 0;
   border-right: 1px solid rgb(0 0 0 / 18%);
-  opacity: 0.42;
-  transition: opacity 300ms ease;
-  border-top: 0;
-  border-bottom: 0;
-  border-left: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+  color: #565b5a;
+  transition: color 300ms ease;
 }
 
 .process-step.is-active {
-  opacity: 1;
+  color: #121415;
 }
 
 .process-step strong {
@@ -1047,7 +1161,11 @@ a {
   align-items: baseline;
   padding: clamp(1.4rem, 2.4vw, 2.2rem) 0;
   border-top: 1px solid var(--line);
-  transition: color 300ms ease, padding 500ms cubic-bezier(.16, 1, .3, 1);
+  transition: color 300ms ease;
+}
+
+.capability-item > * {
+  transition: transform 500ms cubic-bezier(.16, 1, .3, 1);
 }
 
 .capability-item:last-child {
@@ -1055,8 +1173,16 @@ a {
 }
 
 .capability-item:hover {
-  padding-left: 1rem;
   color: #e4b18a;
+}
+
+.capability-item:hover span,
+.capability-item:hover h3 {
+  transform: translateX(14px);
+}
+
+.capability-item:hover p {
+  transform: translateX(-8px);
 }
 
 .capability-item h3 {
@@ -1122,7 +1248,11 @@ a {
   font-weight: 560;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  transition: color 350ms ease, padding 550ms cubic-bezier(.16, 1, .3, 1);
+  transition: color 350ms ease;
+}
+
+.contact-link > span {
+  transition: transform 550ms cubic-bezier(.16, 1, .3, 1);
 }
 
 .contact-link::before {
@@ -1136,22 +1266,28 @@ a {
   transition: transform 500ms cubic-bezier(.16, 1, .3, 1);
 }
 
-.contact-link:hover {
-  padding-inline: 2rem;
+.contact-link:hover,
+.contact-link:focus-visible {
   color: var(--ink);
 }
 
-.contact-link:hover::before {
+.contact-link:hover::before,
+.contact-link:focus-visible::before {
   transform: scaleY(1);
+}
+
+.contact-link:hover > span:first-child,
+.contact-link:focus-visible > span:first-child {
+  transform: translateX(1.6rem);
 }
 
 .contact-arrow {
   font-size: 0.7em;
-  transition: transform 500ms cubic-bezier(.16, 1, .3, 1);
 }
 
-.contact-link:hover .contact-arrow {
-  transform: rotate(-35deg) translate(5px, -4px);
+.contact-link:hover .contact-arrow,
+.contact-link:focus-visible .contact-arrow {
+  transform: translateX(-1.2rem) rotate(-35deg);
 }
 
 .contact-meta {
@@ -1184,8 +1320,35 @@ a {
 .project-page-hero {
   min-height: 100svh;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr auto;
   padding-top: 120px;
+}
+
+.project-back {
+  display: inline-flex;
+  align-self: start;
+  align-items: center;
+  gap: 0.5rem;
+  width: max-content;
+  padding-block: 0.4rem;
+  border-bottom: 1px solid rgb(0 0 0 / 30%);
+  color: #4c5150;
+  transition: color 250ms ease, border-color 250ms ease;
+}
+
+.project-back span {
+  transition: transform 400ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.project-back:hover,
+.project-back:focus-visible {
+  border-bottom-color: rgb(0 0 0 / 70%);
+  color: #101213;
+}
+
+.project-back:hover span,
+.project-back:focus-visible span {
+  transform: translate(-4px, -3px);
 }
 
 .project-page-title {
@@ -1298,6 +1461,16 @@ a {
   text-transform: uppercase;
 }
 
+.project-page-footer {
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  background: #0c0e0f;
+  color: var(--white);
+}
+
+.project-page-footer .site-footer {
+  margin-top: 0;
+}
+
 .not-found {
   min-height: 100svh;
   display: grid;
@@ -1346,36 +1519,6 @@ a {
   .menu-toggle.is-open span:first-child { transform: translateY(3px) rotate(45deg); }
   .menu-toggle.is-open span:last-child { transform: translateY(-3px) rotate(-45deg); }
 
-  .mobile-menu {
-    position: fixed;
-    z-index: 90;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 100px 16px 34px;
-    background: #d9d9d4;
-    color: #101213;
-  }
-
-  .mobile-menu a {
-    display: block;
-    padding: 0.5rem 0;
-    border-top: 1px solid rgb(0 0 0 / 25%);
-    font-family: var(--display);
-    font-size: clamp(3.8rem, 19vw, 7rem);
-    font-weight: 620;
-    letter-spacing: -0.04em;
-    line-height: 0.9;
-    text-transform: uppercase;
-  }
-
-  .mobile-menu-meta {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 3rem;
-  }
-
   .hero-content {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto auto;
@@ -1398,8 +1541,11 @@ a {
     font-size: clamp(2.7rem, 12vw, 5rem);
   }
 
-  .hero-copy p {
-    display: none;
+  /* Was display:none — which deleted the site's only positioning line on the busiest breakpoint. */
+  .hero-copy p:not(.section-kicker) {
+    max-width: 32ch;
+    margin-top: 1rem;
+    font-size: 0.92rem;
   }
 
   .hero-bottom {
@@ -1636,6 +1782,17 @@ a {
     border-bottom: 1px solid rgb(0 0 0 / 18%);
   }
 
+  /* Seven steps in a two-up grid leaves the last one stranded; give the terminal step the row. */
+  .process-step:last-child {
+    grid-column: 1 / -1;
+    border-right: 0;
+  }
+
+  .mono,
+  .section-kicker {
+    font-size: 0.76rem;
+  }
+
   .portrait {
     min-height: 72svh;
   }
@@ -1701,5 +1858,21 @@ a {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* With transitions collapsed, the scroll-driven backdrop and specimen would hard-cut
+     between eight states on the way down the section. Hold them still instead. */
+  .material-section .material-backdrop {
+    background: radial-gradient(circle at 78% 45%, #2b3033, #101314 46%) !important;
+  }
+
+  .material-section .specimen-ring {
+    transform: perspective(700px) rotateX(63deg) rotateZ(-22deg) !important;
+    border-top-color: rgb(236 237 230 / 72%) !important;
+    border-right-color: rgb(193 199 198 / 32%) !important;
+  }
+
+  .material-stage.is-active {
+    transform: none;
   }
 }
