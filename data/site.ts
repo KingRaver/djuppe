@@ -1,5 +1,9 @@
 export const site = {
   name: "Djuppe",
+  // Single source of truth for every absolute URL the site emits — metadataBase,
+  // the sitemap, robots and the canonical tag all derive from this. Open Graph
+  // images must be absolute, so a wrong value here silently kills link previews.
+  url: "https://djuppe.art",
   title: "DJUPPE — Metal, Given Intent",
   description:
     "Objects, structures, and sculptural experiments engineered and fabricated in metal by Djuppe.",
