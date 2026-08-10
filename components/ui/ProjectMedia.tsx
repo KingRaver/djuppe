@@ -6,9 +6,17 @@ type ProjectMediaProps = {
   className?: string;
   priority?: boolean;
   label?: string;
+  /** Match the slot this media actually occupies, or real images are over-fetched. */
+  sizes?: string;
 };
 
-export function ProjectMedia({ visual, className = "", priority = false, label }: ProjectMediaProps) {
+export function ProjectMedia({
+  visual,
+  className = "",
+  priority = false,
+  label,
+  sizes = "(max-width: 900px) 100vw, 75vw",
+}: ProjectMediaProps) {
   return (
     <div className={`project-media media-${visual.variant} ${className}`}>
       {visual.src ? (
@@ -17,7 +25,7 @@ export function ProjectMedia({ visual, className = "", priority = false, label }
           alt={visual.alt}
           fill
           priority={priority}
-          sizes="(max-width: 768px) 100vw, 75vw"
+          sizes={sizes}
         />
       ) : (
         <span className="sr-only">{visual.alt}</span>

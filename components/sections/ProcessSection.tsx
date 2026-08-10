@@ -9,11 +9,17 @@ export function ProcessSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const reduceMotion = useReducedMotion();
+  const pointerLed = useRef(false);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start 70%", "end 40%"] });
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
-    if (!reduceMotion) setActive(Math.min(6, Math.floor(value * 7)));
+    if (reduceMotion || pointerLed.current) return;
+    setActive(Math.min(steps.length - 1, Math.floor(value * steps.length)));
   });
+
+  // Scroll never advances the sequence under reduced motion, so light the whole path up front
+  // rather than leaving six of seven steps dimmed permanently.
+  const current = reduceMotion ? steps.length - 1 : active;
 
   return (
     <section id="process" ref={sectionRef} className="process-section" aria-labelledby="process-title">
@@ -29,7 +35,7 @@ export function ProcessSection() {
         </div>
 
         <div className="process-drawing" aria-hidden="true">
-          <svg viewBox="0 0 1200 500" preserveAspectRatio="none">
+          <svg viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
             <path className="process-line" d="M0 390H1200M150 0V500M1040 0V500" opacity=".35" />
             <circle className="process-line" cx="600" cy="250" r="178" opacity=".25" />
             <motion.path
@@ -45,7 +51,7 @@ export function ProcessSection() {
               d="M60 382 C170 370 155 124 312 116 S485 420 628 361 S745 76 904 132 S1015 390 1160 306"
               pathLength="0.16"
               initial={{ pathOffset: 0 }}
-              animate={{ pathOffset: active / 7 }}
+              animate={{ pathOffset: current / steps.length }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             />
             <text x="72" y="445" className="mono" fill="#454a49">DATUM / 0.000</text>
@@ -53,22 +59,23 @@ export function ProcessSection() {
           </svg>
         </div>
 
-        <div className="process-steps" aria-label="Fabrication process">
+        <ol className="process-steps" aria-label="Fabrication process">
           {steps.map((step, index) => (
-            <button
-              type="button"
+            <li
               key={step}
-              className={`process-step ${index <= active ? "is-active" : ""}`}
-              onPointerEnter={() => setActive(index)}
-              onFocus={() => setActive(index)}
-              onClick={() => setActive(index)}
-              aria-pressed={active === index}
+              className={`process-step ${index <= current ? "is-active" : ""}`}
+              onPointerEnter={(event) => {
+                if (event.pointerType === "touch") return;
+                pointerLed.current = true;
+                setActive(index);
+              }}
+              onPointerLeave={() => { pointerLed.current = false; }}
             >
               <span className="mono">0{index + 1}</span>
               <strong>{step}</strong>
-            </button>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );

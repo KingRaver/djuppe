@@ -21,7 +21,7 @@ export function SelectedWorks() {
 
         <Reveal className="project-feature">
           <Link className="project-link" href={`/work/${tension.slug}`} aria-label={`View ${tension.title}`}>
-            <ProjectMedia visual={tension.images[0]} label={`${tension.number} / ${tension.year}`} />
+            <ProjectMedia visual={tension.images[0]} sizes="100vw" label={`${tension.number} / ${tension.year}`} />
             <div className="project-feature-info">
               <p className="mono">{tension.type}<br />{tension.materials}</p>
               <h3 className="project-title">{tension.title}</h3>
@@ -32,7 +32,7 @@ export function SelectedWorks() {
 
         <Reveal className="study-row">
           <Link className="project-link" href={`/work/${air.slug}`} aria-label={`View ${air.title}`}>
-            <ProjectMedia visual={air.images[1]} label="BAL / 002g" />
+            <ProjectMedia visual={air.images[1]} sizes="(max-width: 560px) 64vw, (max-width: 900px) 40vw, 30vw" label="BAL / 002g" />
           </Link>
           <div className="study-copy">
             <p className="section-kicker">Narrow study / movement</p>
@@ -46,7 +46,7 @@ export function SelectedWorks() {
           {[blackArc, horizon].map((project, index) => (
             <Reveal className="pair-item" key={project.slug} delay={index * 0.1}>
               <Link className="project-link" href={`/work/${project.slug}`} aria-label={`View ${project.title}`}>
-                <ProjectMedia visual={project.images[0]} label={`${project.number} / ${project.year}`} />
+                <ProjectMedia visual={project.images[0]} sizes="(max-width: 560px) 100vw, 55vw" label={`${project.number} / ${project.year}`} />
                 <h3 className="project-title">{project.title}</h3>
                 <div className="pair-meta mono"><span>{project.type}</span><span>{project.location}</span></div>
               </Link>
@@ -66,13 +66,13 @@ export function SelectedWorks() {
                 <p className="mono">18 mm plate<br />Mass removed / 31%<br />{table.dimensions}</p>
               </div>
             </div>
-            <ProjectMedia visual={table.images[0]} label="SECTION / A—A" />
+            <ProjectMedia visual={table.images[0]} sizes="(max-width: 900px) 100vw, 68vw" label="SECTION / A—A" />
           </Link>
         </Reveal>
 
         <Reveal className="measured-work">
           <Link className="project-link" href={`/work/${counterforce.slug}`} aria-label={`View ${counterforce.title}`}>
-            <ProjectMedia visual={counterforce.images[0]} label="LOAD / 38.4 kN" />
+            <ProjectMedia visual={counterforce.images[0]} sizes="(max-width: 900px) 100vw, 67vw" label="LOAD / 38.4 kN" />
           </Link>
           <div className="measured-copy">
             <p className="section-kicker">Equilibrium / exterior</p>
@@ -89,7 +89,7 @@ export function SelectedWorks() {
 
         <Reveal className="study-row">
           <Link className="project-link" href={`/work/${machine.slug}`} aria-label={`View ${machine.title}`}>
-            <ProjectMedia visual={machine.images[0]} label="CYCLE / 43:12" />
+            <ProjectMedia visual={machine.images[0]} sizes="(max-width: 560px) 64vw, (max-width: 900px) 40vw, 30vw" label="CYCLE / 43:12" />
           </Link>
           <div className="study-copy">
             <p className="section-kicker">Mechanical object / slow cycle</p>

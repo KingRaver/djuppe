@@ -39,4 +39,6 @@ project-slug-03.webp  # technical or installation view
 
 Then add `src: "/images/projects/project-slug-01.webp"` to the matching image object in `data/projects.ts`. The existing `variant` stays as a procedural fallback and loading treatment. Use descriptive alt text that says what is visible, not “project image.”
 
+Each `<ProjectMedia>` call site already passes a `sizes` value matching the slot that media occupies (full-bleed feature, narrow study column, paired grid, gallery half). If you change a layout’s column widths, update that slot’s `sizes` too, or the browser will download the wrong resolution.
+
 Replace the placeholder domain `https://djuppe.example`, placeholder email, Instagram URL, portrait treatment, and location before launch. Update the domain in `app/layout.tsx`, `app/sitemap.ts`, `app/robots.ts`, and the structured data in `app/page.tsx`.

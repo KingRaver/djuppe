@@ -15,13 +15,18 @@ const stages = [
 
 export function MaterialIntelligence() {
   const [active, setActive] = useState(0);
-  const stageRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const stageRefs = useRef<Array<HTMLElement | null>>([]);
+  // While the pointer is inside the list the reader is driving; scroll position must not fight it.
+  const pointerLed = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        if (pointerLed.current) return;
         const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive(Number((visible.target as HTMLElement).dataset.index));
+        if (!visible) return;
+        const index = Number((visible.target as HTMLElement).dataset.index);
+        if (Number.isFinite(index)) setActive(index);
       },
       { rootMargin: "-30% 0px -45% 0px", threshold: [0.15, 0.45, 0.75] },
     );
@@ -42,25 +47,25 @@ export function MaterialIntelligence() {
             <span className="media-mark">SPECIMEN / {String(active + 1).padStart(2, "0")}</span>
           </div>
         </div>
-        <div className="material-stages">
+        <div className="material-stages" onPointerLeave={() => { pointerLed.current = false; }}>
           {stages.map((stage, index) => (
-            <button
-              type="button"
+            <article
               key={stage.name}
               ref={(node) => { stageRefs.current[index] = node; }}
               data-index={index}
               className={`material-stage ${active === index ? "is-active" : ""}`}
-              onPointerEnter={() => setActive(index)}
-              onFocus={() => setActive(index)}
-              onClick={() => setActive(index)}
-              aria-pressed={active === index}
+              onPointerEnter={(event) => {
+                if (event.pointerType === "touch") return;
+                pointerLed.current = true;
+                setActive(index);
+              }}
             >
-              <span className="mono">{String(index + 1).padStart(2, "0")}</span>
-              <span>
+              <span className="mono material-stage-index">{String(index + 1).padStart(2, "0")}</span>
+              <div>
                 <h3>{stage.name}</h3>
                 <p>{stage.note}</p>
-              </span>
-            </button>
+              </div>
+            </article>
           ))}
         </div>
       </div>

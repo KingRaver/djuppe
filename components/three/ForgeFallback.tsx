@@ -1,6 +1,11 @@
-export function ForgeFallback() {
+type ForgeFallbackProps = {
+  /** Set once the WebGL forge is live, so the two ribbons never show through each other. */
+  dimmed?: boolean;
+};
+
+export function ForgeFallback({ dimmed = false }: ForgeFallbackProps) {
   return (
-    <svg className="hero-static" viewBox="0 0 1000 820" aria-hidden="true">
+    <svg className="hero-static" data-dimmed={dimmed ? "true" : undefined} viewBox="0 0 1000 820" aria-hidden="true">
       <defs>
         <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#25292b" />
