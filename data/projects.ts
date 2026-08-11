@@ -2,6 +2,14 @@ export type ProjectVisual = {
   src?: string;
   alt: string;
   variant: "arc" | "temper" | "fold" | "seam" | "mesh" | "horizon" | "machine";
+  /**
+   * Where the real horizon sits in this photograph, as a fraction of its
+   * height. Set it and the survey datum draws there; omit it and no line is
+   * drawn. It has to be per-image — two frames of the same site put the
+   * waterline in different places.
+   */
+  datum?: number;
+  datumLabel?: string;
 };
 
 // No measured data is published anywhere on this site. `note` carries the
@@ -42,6 +50,15 @@ export const projects: Project[] = [
         src: "/images/projects/mirario-01.jpg",
         alt: "A timber-canopied stage on an open grass hilltop, speakers rigged overhead, with the Tagus estuary and Lisbon on the far bank",
         variant: "horizon",
+        datum: 0.395,
+        datumLabel: "TAGUS",
+      },
+      {
+        src: "/images/projects/mirario-02.jpg",
+        alt: "The same stage at sunset, its canopy silhouetted above a dense crowd, low sun burning across the estuary behind it",
+        variant: "temper",
+        datum: 0.54,
+        datumLabel: "TAGUS",
       },
     ],
   },
