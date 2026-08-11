@@ -493,6 +493,20 @@ a {
   line-height: 1.6;
 }
 
+/* Prose note on the dark home ground. Sits where measured data used to. */
+.project-note {
+  display: block;
+  max-width: 44ch;
+  margin-top: 0.75rem;
+  color: #9fa5a4;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-transform: none;
+  text-wrap: pretty;
+}
+
 .project-link {
   display: block;
 }
@@ -1320,7 +1334,8 @@ a {
 .project-page-hero {
   min-height: 100svh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  /* back link / title / notation row / prose note */
+  grid-template-rows: auto 1fr auto auto;
   padding-top: 120px;
 }
 
@@ -1360,10 +1375,21 @@ a {
 
 .project-page-meta {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  padding: 1.4rem 0 2rem;
+  padding: 1.4rem 0 1.1rem;
   border-top: 1px solid rgb(0 0 0 / 28%);
+}
+
+/* Prose deliberately breaks the notation grid: it is the one line in this
+   header that is not measured data. */
+.project-page-note {
+  max-width: 46ch;
+  padding-bottom: 2rem;
+  color: rgb(7 9 10 / 62%);
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  line-height: 1.5;
+  text-wrap: pretty;
 }
 
 .project-page-meta span {

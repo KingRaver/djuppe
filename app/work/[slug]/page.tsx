@@ -41,7 +41,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     name: project.title,
     creator: { "@type": "Person", name: "Djuppe" },
     dateCreated: project.year,
-    artMedium: project.materials,
+    // No artMedium: structured data is syndicated to search engines, and
+    // material description is not published.
     artform: project.type,
     locationCreated: project.location,
     description: project.description,
@@ -57,10 +58,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <h1 className="project-page-title display">{project.title}</h1>
         <div className="project-page-meta mono">
           <div>Object / Year<span>{project.number} / {project.year}</span></div>
+          <div>Location<span>{project.location}</span></div>
           <div>Classification<span>{project.type}</span></div>
-          <div>Material<span>{project.materials}</span></div>
-          <div>Dimensions<span>{project.dimensions}</span></div>
         </div>
+        <p className="project-page-note">{project.note}</p>
       </header>
 
       <section className="project-lead-media" aria-label={`${project.title} overview`}>
@@ -81,16 +82,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      <section className="project-gallery container-wide" aria-label={`${project.title} details`}>
-        {project.images.slice(1).map((visual, index) => (
-          <ProjectMedia
-            key={`${visual.variant}-${index}`}
-            visual={visual}
-            sizes="(max-width: 560px) 100vw, 50vw"
-            label={`DETAIL / ${String(index + 1).padStart(2, "0")}`}
-          />
-        ))}
-      </section>
+      {/* A work with a single photograph has no detail gallery; rendering the
+          section empty would leave a grid's worth of dead space. */}
+      {project.images.length > 1 && (
+        <section className="project-gallery container-wide" aria-label={`${project.title} details`}>
+          {project.images.slice(1).map((visual, index) => (
+            <ProjectMedia
+              key={`${visual.variant}-${index}`}
+              visual={visual}
+              sizes="(max-width: 560px) 100vw, 50vw"
+              label={`DETAIL / ${String(index + 1).padStart(2, "0")}`}
+            />
+          ))}
+        </section>
+      )}
 
       <Link className="project-next" href={`/work/${next.slug}`}>
         <div className="project-next-inner container-wide">
