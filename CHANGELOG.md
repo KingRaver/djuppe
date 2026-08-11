@@ -28,14 +28,19 @@ All notable changes to this project are documented here.
 
 ### Added
 
+- Mirário (2026), a performance structure at Quinta Mirário in Caparica and the first work on the site carrying a real photograph rather than a procedural study. It holds the home page feature slot, which renders at exactly 16:9 above 1600px and matches the source frame. The source file is 1182px wide and will upscale until a full-resolution original replaces it.
+- A registry test that fails if a measurement, unit or tolerance reappears in any project field that reaches a page, a share card or structured data.
 - A brand imagery system under `app/_brand/`, shared by every generated image so the icons and the share card cannot drift apart: palette tokens mirroring `globals.css`, an SVG-turbulence grain field, and the mark itself.
 - Redrawn Open Graph card — real Big Shoulders Display via bundled static TrueType instances, forge heat bloom against a quench-blue cold edge, drawing-board grid, scanlines, grain, and the studio statement.
-- Per-project share cards. Each `/work/[slug]` generates its own 1200x630 image — title, one-line description, and a museum label carrying materials, dimensions and year — so sharing a specific piece shows that piece. All seven rasterise at build time.
+- Per-project share cards. Each `/work/[slug]` generates its own 1200x630 image — title, one-line description, and a museum label carrying location, classification and year — so sharing a specific piece shows that piece. All eight rasterise at build time.
 - A geometric motif per project driven by its existing `ProjectVisual` variant (`arc`, `temper`, `fold`, `seam`, `mesh`, `horizon`, `machine`), so no two cards look alike beyond their text.
 - Full icon set generated from one geometric mark: favicon, 180x180 apple-touch icon, and 192/512 maskable PWA icons, plus a web manifest. The mark is drawn from primitives rather than set in Big Shoulders because the condensed display face closes its counter at 16px and collapses into a solid slab.
 
 ### Changed
 
+- **No measured engineering data is published anywhere.** `materials` and `dimensions` left the `Project` type in favour of `location` and a prose `note`. The detail page notation row is now three cells — object/year, location, classification — over a full-width prose line; `artMedium` is gone from the project JSON-LD, which was syndicating material description to search engines; and the share card's museum label carries location, classification and year. The specs hardcoded into the home layout went with them: plate thickness, mass removed, sound pressure, span and rise, plus the figures burned into photo overlay labels (`LOAD / 38.4 kN`, `CYCLE / 43:12`, `BAL / 002g`). Fabrication notes keep their process language without the figures.
+- The works register count derives from `projects.length` rather than a hardcoded seven, which had already drifted.
+- A work may ship with a single photograph. The detail gallery renders only when a project has more than one image, instead of leaving an empty grid.
 - Hover states on the works register, capabilities list, and contact link animate `transform` instead of `padding`, removing per-frame layout on full-width rows.
 - Primary navigation marks the current section with `aria-current` via a scroll spy.
 - The process drawing uses `preserveAspectRatio="xMidYMid slice"` instead of `none`, so it is no longer visibly squashed on narrow viewports.

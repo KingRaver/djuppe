@@ -9,7 +9,7 @@ import { getProject, projects } from "@/data/projects";
 // cards out of the prerender manifest, so each would rasterise on demand the first
 // time a scraper asked — the exact cold-render latency that loses a preview.
 // twitter:title and twitter:description are already per-project, so the trade is cheap.
-export const alt = "DJUPPE project card — title, materials, dimensions and year over a forge-lit ground";
+export const alt = "DJUPPE project card — title, location, classification and year over a forge-lit ground";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -163,8 +163,8 @@ export default async function ProjectOpenGraphImage({ params }: { params: Promis
             <div style={{ display: "flex", height: 1, background: "rgba(217,221,220,0.16)", marginBottom: 26 }} />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
               <div style={{ display: "flex", gap: 56 }}>
-                <Spec label="MATERIALS" value={project.materials} />
-                <Spec label="DIMENSIONS" value={project.dimensions} />
+                <Spec label="LOCATION" value={project.location} />
+                <Spec label="CLASSIFICATION" value={project.type} />
                 <Spec label="YEAR" value={project.year} />
               </div>
               <span style={{ fontSize: 15, letterSpacing: 4, color: brand.silver }}>DJUPPE.ART</span>
