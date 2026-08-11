@@ -7,7 +7,7 @@ export const site = {
   title: "DJUPPE — Metal, Given Intent",
   description:
     "Objects, structures, and sculptural experiments engineered and fabricated in metal by Djuppe.",
-  location: "Athens / working internationally",
+  location: "Lisbon / working internationally",
   email: "studio@djuppe.example",
   instagram: "https://instagram.com/djuppe",
   instagramLabel: "@djuppe",

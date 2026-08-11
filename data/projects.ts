@@ -30,7 +30,7 @@ export const projects: Project[] = [
     type: "Freestanding sculpture",
     materials: "Cold-rolled steel, black oxide, wax",
     dimensions: "3100 × 900 × 520 mm",
-    location: "Athens, GR",
+    location: "Lisbon, PT",
     description: "A four-millimetre sheet persuaded into a load-bearing line.",
     statement: [
       "Tension Study began as a test of how little material could hold a monumental posture. Its two folded edges act as hidden beams; the broad face carries the marks of rollers, clamps and the final adjustment by heat.",
@@ -51,7 +51,7 @@ export const projects: Project[] = [
     type: "Architectural installation",
     materials: "Rolled mild steel, graphite patina",
     dimensions: "8200 × 1800 × 340 mm",
-    location: "Piraeus, GR",
+    location: "Setúbal, PT",
     description: "An eight-metre compression arc balanced between two existing walls.",
     statement: [
       "Black Arc was designed for a passage that already carried the memory of industrial use. The piece avoids touching the floor. Its force travels laterally into two concealed bearing plates, leaving a dark interval overhead.",
@@ -134,7 +134,7 @@ export const projects: Project[] = [
     type: "Outdoor sculpture",
     materials: "Weathering steel, stainless cable",
     dimensions: "5200 × 4100 × 1900 mm",
-    location: "Thessaloniki, GR",
+    location: "Porto, PT",
     description: "Two leaning frames made stable by the force pulling them together.",
     statement: [
       "Counterforce is structurally incomplete without tension. Two weathering-steel frames lean away from one another while a single stainless cable draws them into equilibrium.",
@@ -154,7 +154,7 @@ export const projects: Project[] = [
     type: "Mechanical sculpture",
     materials: "Blued steel, aluminium, reduction drive",
     dimensions: "1100 × 760 × 1600 mm",
-    location: "Athens, GR",
+    location: "Lisbon, PT",
     description: "A machine that performs one precise movement with no useful outcome.",
     statement: [
       "A reduction drive turns a folded aluminium arm once every forty-three minutes. Its endpoint presses lightly against a sprung steel surface, releases it, and begins again.",
