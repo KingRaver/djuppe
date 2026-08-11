@@ -17,8 +17,15 @@ export function ProjectMedia({
   label,
   sizes = "(max-width: 900px) 100vw, 75vw",
 }: ProjectMediaProps) {
+  // The procedural study is a stand-in for a photograph, not a layer over one.
+  // `is-photographic` suppresses it so the variant only ever shows when there
+  // is nothing else to show.
+  const isPhotographic = Boolean(visual.src);
+
   return (
-    <div className={`project-media media-${visual.variant} ${className}`}>
+    <div
+      className={`project-media media-${visual.variant}${isPhotographic ? " is-photographic" : ""} ${className}`}
+    >
       {visual.src ? (
         <Image
           src={visual.src}
@@ -29,6 +36,11 @@ export function ProjectMedia({
         />
       ) : (
         <span className="sr-only">{visual.alt}</span>
+      )}
+      {isPhotographic && visual.datum !== undefined && (
+        <span className="media-datum" style={{ top: `${visual.datum * 100}%` }} aria-hidden="true">
+          <span className="media-datum-label">{visual.datumLabel ?? "DATUM"}</span>
+        </span>
       )}
       <span className="media-mark" aria-hidden="true">
         {label ?? `MAT / ${visual.variant.toUpperCase()}`}
