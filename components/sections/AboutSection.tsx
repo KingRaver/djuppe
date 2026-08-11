@@ -7,7 +7,7 @@ export function AboutSection() {
       <div className="about-grid container-wide">
         <Reveal className="portrait">
           <div className="portrait-label mono">
-            <span>Portrait placeholder / replace</span><span>Workshop / Athens</span>
+            <span>Portrait placeholder / replace</span><span>Workshop / Lisbon</span>
           </div>
         </Reveal>
         <div className="about-copy">

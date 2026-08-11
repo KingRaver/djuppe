@@ -15,7 +15,7 @@ export default function Home() {
     jobTitle: "Artist, designer and metal fabricator",
     url: "https://djuppe.example",
     sameAs: [site.instagram],
-    address: { "@type": "PostalAddress", addressLocality: "Athens", addressCountry: "GR" },
+    address: { "@type": "PostalAddress", addressLocality: "Lisbon", addressCountry: "PT" },
     knowsAbout: ["Metal sculpture", "Industrial design", "Structural fabrication", "Kinetic systems"],
   };
 

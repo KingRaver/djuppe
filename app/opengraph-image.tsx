@@ -68,7 +68,7 @@ export default async function OpenGraphImage() {
               <div style={{ width: 10, height: 10, background: brand.ember, marginRight: 16 }} />
               <span>DJUPPE / FABRICATION STUDIO</span>
             </div>
-            <span>ATHENS / GR</span>
+            <span>LISBON / PT</span>
           </div>
 
           {/* Headline + forge ring */}

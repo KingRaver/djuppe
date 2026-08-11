@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s — DJUPPE",
   },
   description: site.description,
-  keywords: ["Djuppe", "metal sculpture", "fabrication", "industrial design", "kinetic sculpture", "Athens"],
+  keywords: ["Djuppe", "metal sculpture", "fabrication", "industrial design", "kinetic sculpture", "Lisbon"],
   authors: [{ name: "Djuppe" }],
   creator: "Djuppe",
   openGraph: {

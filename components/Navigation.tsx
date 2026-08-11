@@ -147,7 +147,7 @@ export function Navigation() {
               </motion.div>
             ))}
             <div className="mobile-menu-meta mono">
-              <span>Workshop / active</span><span>Athens / GR</span>
+              <span>Workshop / active</span><span>Lisbon / PT</span>
             </div>
           </motion.nav>
         )}
