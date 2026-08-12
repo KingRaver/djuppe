@@ -28,10 +28,14 @@ export function ProjectMedia({
   // isn't a device pixel on any retina screen, so capping at native width
   // still upscales (and still pixelates) on the 2x/3x displays most visitors
   // have. Halving it keeps the image sharp at typical device pixel ratios.
+  // The cap has to yield to the slot as well. A grid item carrying an
+  // `aspect-ratio` does not stretch to its column — it takes its width from its
+  // own height — so capping height alone lets the box compute a width wider
+  // than the column and push the whole page sideways.
   const sizeCap =
     visual.width && visual.height
       ? {
-          maxWidth: `${Math.round(visual.width / 2)}px`,
+          maxWidth: `min(100%, ${Math.round(visual.width / 2)}px)`,
           maxHeight: `${Math.round(visual.height / 2)}px`,
           aspectRatio: `${visual.width} / ${visual.height}`,
         }

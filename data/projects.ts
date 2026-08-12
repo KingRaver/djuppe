@@ -42,6 +42,61 @@ export type Project = {
 // The procedural `variant` remains available as a loading/fallback treatment.
 export const projects: Project[] = [
   {
+    slug: "observation-tower",
+    number: "W–043",
+    title: "Observation Tower",
+    year: "2026",
+    type: "Floating structure",
+    location: "Sesimbra, PT",
+    note: "Glass and timber on a moored pontoon, never entirely still.",
+    description: "A glazed lookout moored off the shore at Lagoa de Albufeira, reached only by water.",
+    statement: [
+      "There is no high ground at the lagoon. A vantage over it has to be built, and building one on the water means giving up the idea that it will hold still. The tower is moored rather than founded, and it moves whenever the lake does.",
+      "The structure is timber: splayed posts standing off a pontoon deck and braced back into it, carrying a glazed shaft the rest of the way up. A flared skirt of glass throws weather clear of the platform below. Nothing above the deck is solid except the frame, so for most of the day the tower reads as a line drawing of itself against the far shore, and after dark, with someone climbing inside it, as the only lit thing on the water.",
+    ],
+    images: [
+      // The lead runs full-bleed at 82svh and is deliberately uncapped: a native
+      // size here would cap the display box to half the source and collapse it.
+      // Uncapped also means the box is wider than this frame at every desktop
+      // size, so `cover` crops it vertically by an amount that changes with the
+      // viewport. A datum fraction is fixed and would drift out of the water as
+      // the window widens — the waterline is at 0.79 here, but only the frames
+      // below can draw it where it actually falls.
+      {
+        src: "/images/projects/observation-tower-01.jpg",
+        alt: "A glazed timber tower on a floating pontoon at dusk, a single figure standing inside it, pine woods dark along the far shore",
+        variant: "horizon",
+      },
+      {
+        src: "/images/projects/observation-tower-04.jpg",
+        alt: "The same tower before sunrise, mist lying on a dead-calm lake and the whole structure repeated in the reflection",
+        variant: "seam",
+        datum: 0.59,
+        datumLabel: "LAGOA",
+        width: 1590,
+        height: 1058,
+      },
+      {
+        src: "/images/projects/observation-tower-02.jpg",
+        alt: "The tower at moonrise, a full moon above it and a crowd gathered along the far shore",
+        variant: "fold",
+        datum: 0.83,
+        datumLabel: "LAGOA",
+        width: 1594,
+        height: 1196,
+      },
+      {
+        src: "/images/projects/observation-tower-03.jpg",
+        alt: "The tower silhouetted against a burning sunset, a swimmer's head and shoulders in the foreground water",
+        variant: "temper",
+        datum: 0.62,
+        datumLabel: "LAGOA",
+        width: 1586,
+        height: 1330,
+      },
+    ],
+  },
+  {
     slug: "mirario",
     number: "W–042",
     title: "Mirário",
