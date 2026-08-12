@@ -700,6 +700,12 @@ a {
   min-height: 320px;
   background: #151819;
   isolation: isolate;
+  /* Explicit, because `normal` behaves as `start` — not `stretch` — once a box
+     carries an aspect ratio, and a photograph with a native-size cap does. Left
+     at `normal`, the offset second gallery item takes its width from its own
+     height and then measures its 100% cap against the whole grid area, margin
+     included, so it hangs off the side of the page. */
+  justify-self: stretch;
 }
 
 .project-media::before,
@@ -1435,7 +1441,9 @@ a {
   align-self: end;
   align-items: flex-end;
   justify-content: flex-start;
-  gap: 13.5rem;
+  /* Row gap stays small: a title long enough to wrap the inset onto its own
+     line should not also inherit the column gap as 216px of dead space. */
+  gap: 2.5rem 13.5rem;
 }
 
 .project-page-title {

@@ -4,8 +4,12 @@ import { ProjectMedia } from "@/components/ui/ProjectMedia";
 import { Reveal } from "@/components/ui/Reveal";
 
 export function SelectedWorks() {
-  // The feature slot renders at 16:9, so it takes the one work with a real photograph.
-  const [feature, , blackArc, air, horizon, table, counterforce, machine] = projects;
+  // Every slot below the feature carries copy written for the work it holds —
+  // a hardcoded object number, a sentence continuing that work's description —
+  // so each name has to keep landing on the same project as the register grows.
+  // The newest work takes the 16:9 feature slot and each addition above Black
+  // Arc opens another hole here; those works show in the full register below.
+  const [feature, , , blackArc, air, horizon, table, counterforce, machine] = projects;
 
   return (
     <section id="work" className="works" aria-labelledby="works-title">
