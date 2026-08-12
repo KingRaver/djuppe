@@ -10,6 +10,15 @@ export type ProjectVisual = {
    */
   datum?: number;
   datumLabel?: string;
+  /** Light suits a datum crossing sky or water; dark suits one crossing ground. */
+  datumTone?: "light" | "dark";
+  /**
+   * The source file's native pixel size. When set, the display box is capped
+   * to it so a lower-resolution photograph is never upscaled to fill a slot
+   * sized for higher-resolution work.
+   */
+  width?: number;
+  height?: number;
 };
 
 // No measured data is published anywhere on this site. `note` carries the
@@ -50,15 +59,18 @@ export const projects: Project[] = [
         src: "/images/projects/mirario-01.jpg",
         alt: "A timber-canopied stage on an open grass hilltop, speakers rigged overhead, with the Tagus estuary and Lisbon on the far bank",
         variant: "horizon",
-        datum: 0.395,
+        datum: 0.95,
         datumLabel: "TAGUS",
+        datumTone: "dark",
       },
       {
         src: "/images/projects/mirario-02.jpg",
         alt: "The same stage at sunset, its canopy silhouetted above a dense crowd, low sun burning across the estuary behind it",
         variant: "temper",
-        datum: 0.54,
+        datum: 0.92,
         datumLabel: "TAGUS",
+        width: 720,
+        height: 385,
       },
     ],
   },
