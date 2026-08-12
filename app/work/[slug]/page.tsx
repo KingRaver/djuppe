@@ -55,7 +55,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Link className="project-back mono" href="/#work">
           <span aria-hidden="true">↖</span> Works register
         </Link>
-        <h1 className="project-page-title display">{project.title}</h1>
+        <div className="project-page-title-row">
+          <h1 className="project-page-title display">{project.title}</h1>
+          {project.images[1] && (
+            <ProjectMedia
+              visual={project.images[1]}
+              className="project-page-title-media"
+              sizes="(max-width: 900px) 45vw, 22vw"
+              hideMark
+            />
+          )}
+        </div>
         <div className="project-page-meta mono">
           <div>Object / Year<span>{project.number} / {project.year}</span></div>
           <div>Location<span>{project.location}</span></div>
@@ -65,7 +75,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </header>
 
       <section className="project-lead-media" aria-label={`${project.title} overview`}>
-        <ProjectMedia visual={project.images[0]} priority sizes="100vw" label={`${project.number} / GENERAL VIEW`} />
+        <ProjectMedia visual={project.images[0]} priority sizes="100vw" hideMark />
       </section>
 
       <section className="project-story container" aria-labelledby="project-statement">
@@ -82,11 +92,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      {/* A work with a single photograph has no detail gallery; rendering the
-          section empty would leave a grid's worth of dead space. */}
-      {project.images.length > 1 && (
+      {/* images[1] runs as the inset next to the title, so the gallery picks
+          up from images[2]. A work with nothing left there has no detail
+          gallery; rendering the section empty would leave a grid's worth of
+          dead space. */}
+      {project.images.length > 2 && (
         <section className="project-gallery container-wide" aria-label={`${project.title} details`}>
-          {project.images.slice(1).map((visual, index) => (
+          {project.images.slice(2).map((visual, index) => (
             <ProjectMedia
               key={`${visual.variant}-${index}`}
               visual={visual}
