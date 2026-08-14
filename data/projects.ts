@@ -103,10 +103,10 @@ export const projects: Project[] = [
     year: "2026",
     type: "Performance structure",
     location: "Monte da Caparica, PT",
-    note: "Timber and steel on an exposed hill, built to carry sound over water.",
-    description: "A stage on the open slope above the Tagus, turned to face the river.",
+    note: "Timber and steel on an exposed hill, braced against the wind off the water.",
+    description: "A stage angled off the river so the sunset falls behind it, in the crowd's line of sight.",
     statement: [
-      "The site gave the brief before anyone drew anything: an open slope above the Tagus, wind off the water, and Lisbon sitting on the far bank in full view. Anything built there had to hold its own against that horizon without competing with it.",
+      "The site gave the brief before anyone drew anything: an open slope above the Tagus, wind off the water, and Lisbon sitting on the far bank in full view. Anything built there had to hold its own against that horizon without competing with it. The answer was to angle the stage off the river rather than square it to the view: face the deck and the estuary sits beyond it with the sun going down over the far bank, so the crowd keeps the horizon and the performer works with their back to it.",
       "The canopy is a run of close-set timber over a raised deck, carried on a steel frame that also takes the weight of the rigging. It reads as shelter from below and as structure from the side. In daylight the slats drop a moving grid across the deck; after dark the frame disappears and only the load it carries is visible.",
     ],
     images: [
