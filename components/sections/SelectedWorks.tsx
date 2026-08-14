@@ -7,9 +7,10 @@ export function SelectedWorks() {
   // Every slot below the feature carries copy written for the work it holds —
   // a hardcoded object number, a sentence continuing that work's description —
   // so each name has to keep landing on the same project as the register grows.
-  // The newest work takes the 16:9 feature slot and each addition above Black
-  // Arc opens another hole here; those works show in the full register below.
-  const [feature, , , blackArc, air, horizon, table, counterforce, machine] = projects;
+  // The holes are works the curated grid deliberately omits, not gaps to fill
+  // in order: they still show in the full register below. Adding a work to the
+  // top of `projects` shifts every name here by one, so re-check the holes.
+  const [feature, quintaMiraRio, , blackArc, air, horizon, table, , machine] = projects;
 
   return (
     <section id="work" className="works" aria-labelledby="works-title">
@@ -76,19 +77,24 @@ export function SelectedWorks() {
           </Link>
         </Reveal>
 
+        {/* This slot crops horizontally, never vertically: the media box is
+            taller than it is wide at every breakpoint, so a landscape frame
+            fills the height and loses its margins instead. That is why the
+            lead photograph's `datum` fraction still lands on the real
+            waterline here — it would not survive a vertical crop. */}
         <Reveal className="measured-work">
-          <Link className="project-link" href={`/work/${counterforce.slug}`} aria-label={`View ${counterforce.title}`}>
-            <ProjectMedia visual={counterforce.images[0]} sizes="(max-width: 900px) 100vw, 67vw" label={`${counterforce.number} / ${counterforce.year}`} />
+          <Link className="project-link" href={`/work/${quintaMiraRio.slug}`} aria-label={`View ${quintaMiraRio.title}`}>
+            <ProjectMedia visual={quintaMiraRio.images[0]} sizes="(max-width: 900px) 100vw, 67vw" label={`${quintaMiraRio.number} / ${quintaMiraRio.year}`} />
           </Link>
           <div className="measured-copy">
-            <p className="section-kicker">Equilibrium / exterior</p>
-            <Link href={`/work/${counterforce.slug}`}><h3 className="project-title">{counterforce.title}</h3></Link>
-            <p>{counterforce.description}</p>
+            <p className="section-kicker">Exposed site / sound</p>
+            <Link href={`/work/${quintaMiraRio.slug}`}><h3 className="project-title">{quintaMiraRio.title}</h3></Link>
+            <p>{quintaMiraRio.description}</p>
             <div className="dimension-list mono">
-              <div><span>Object</span><span>{counterforce.number}</span></div>
-              <div><span>Year</span><span>{counterforce.year}</span></div>
-              <div><span>Location</span><span>{counterforce.location}</span></div>
-              <div><span>Status</span><span>In equilibrium</span></div>
+              <div><span>Object</span><span>{quintaMiraRio.number}</span></div>
+              <div><span>Year</span><span>{quintaMiraRio.year}</span></div>
+              <div><span>Location</span><span>{quintaMiraRio.location}</span></div>
+              <div><span>Status</span><span>In use</span></div>
             </div>
           </div>
         </Reveal>
