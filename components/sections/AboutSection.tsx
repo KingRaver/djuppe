@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { site } from "@/data/site";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -5,9 +6,15 @@ export function AboutSection() {
   return (
     <section id="about" className="about-section" aria-labelledby="about-title">
       <div className="about-grid container-wide">
-        <Reveal className="portrait">
+        <Reveal className="portrait is-photographic">
+          <Image
+            src="/images/portrait.jpg"
+            alt="Djuppe at the workshop, hat and sunglasses, giving a shaka sign"
+            fill
+            sizes="(max-width: 900px) 100vw, 45vw"
+          />
           <div className="portrait-label mono">
-            <span>Portrait placeholder / replace</span><span>Workshop / Lisbon</span>
+            <span>Djuppe</span><span>Workshop / Lisbon</span>
           </div>
         </Reveal>
         <div className="about-copy">

@@ -1175,6 +1175,21 @@ a {
   clip-path: polygon(0 0, 22% 0, 22% 1px, 1px 1px, 1px 20%, 0 20%, 0 100%, 78% 100%, 78% calc(100% - 1px), calc(100% - 1px) calc(100% - 1px), calc(100% - 1px) 80%, 100% 80%, 100% 0);
 }
 
+.portrait img {
+  object-fit: cover;
+}
+
+/* The gradient study and light sweep are a stand-in for a missing photograph;
+   once there is a real one, only the corner frame stays. */
+.portrait.is-photographic {
+  background: #151819;
+  filter: none;
+}
+
+.portrait.is-photographic::before {
+  content: none;
+}
+
 .portrait-label {
   position: absolute;
   z-index: 2;
