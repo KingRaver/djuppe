@@ -67,6 +67,7 @@ All notable changes to this project are documented here.
 - The seventh process step spans the full row below 560px instead of being stranded in a two-up grid.
 - Project detail pages gained a back-to-register link and the site footer they were missing; the footer is now a shared `SiteFooter` component.
 - `ProjectMedia` accepts a `sizes` prop, and every call site passes a value matching its actual layout slot.
+- `next-env.d.ts` and `tsconfig.tsbuildinfo` are no longer tracked. Both are generated, and both were showing as pending changes on every branch: `next dev` rewrites `next-env.d.ts` to import from `.next/dev/types` and `next build` points it back at `.next/types`, so it reflects whichever command ran last rather than anything anyone wrote, and the buildinfo is TypeScript's incremental cache, which changes on every typecheck. Keeping them out of unrelated commits was a manual step on each one. `create-next-app` ignores both by default; this repo had not. Next regenerates them on the first `dev` or `build`, so a fresh clone needs no extra step.
 
 ## [1.0.0] — 2026-08-07
 
