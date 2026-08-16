@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMotionValue, useReducedMotion } from "motion/react";
+import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { site } from "@/data/site";
 import { ForgeFallback } from "@/components/three/ForgeFallback";
@@ -18,6 +18,13 @@ export function Hero() {
   const [canRenderWebGL, setCanRenderWebGL] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
   const [inView, setInView] = useState(true);
+
+  // The hero used to leave at exactly the speed of the page. Separating the ribbon from the
+  // type on the way out is what gives the top of the page any depth on scroll.
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const sceneY = useTransform(scrollYProgress, [0, 1], [0, 170]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.72], [1, 0]);
 
   // Cached so pointermove never reads layout.
   useEffect(() => {
@@ -66,12 +73,19 @@ export function Hero() {
     <section ref={sectionRef} className="hero" aria-labelledby="hero-title" onPointerMove={handlePointer}>
       <ForgeFallback dimmed={sceneReady} />
       {canRenderWebGL && (
-        <div className="hero-scene" aria-hidden="true">
+        <motion.div className="hero-scene" aria-hidden="true" style={reduceMotion ? undefined : { y: sceneY }}>
           <ForgeScene pointer={pointer} active={inView} onReady={() => setSceneReady(true)} />
-        </div>
+        </motion.div>
       )}
+      {/* Grain and scanlines were defined in the brand tokens but only ever applied to the
+          OG card, so the share image was better textured than the page. Sits under the copy
+          layer on purpose — atmosphere belongs on the imagery, not on the type. */}
+      <div className="hero-grain" aria-hidden="true" />
       <div className="hero-heat-line" aria-hidden="true" />
-      <div className="hero-content container-wide">
+      <motion.div
+        className="hero-content container-wide"
+        style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}
+      >
         <h1 id="hero-title" className="hero-title display">Djuppe</h1>
         <div className="hero-copy">
           <p className="section-kicker">Metal, given intent</p>
@@ -85,7 +99,7 @@ export function Hero() {
           <div className="hero-spec">Obj. F–001<br />316L / forged section</div>
           <div className="hero-spec">1620 × 980 × 240<br />Surface / 683 K</div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

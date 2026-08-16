@@ -3,8 +3,11 @@
 import { Edges } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import type { MotionValue } from "motion/react";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { ForgeAtmosphere } from "./ForgeAtmosphere";
+import { applyTemperShader } from "./temperMaterial";
+import { useForgeEnvironment } from "./useForgeEnvironment";
 
 type Pointer = { x: MotionValue<number>; y: MotionValue<number> };
 
@@ -29,6 +32,14 @@ function CameraRig({ pointer }: { pointer: Pointer }) {
 function ForgedRibbon({ pointer }: { pointer: Pointer }) {
   const group = useRef<THREE.Group>(null);
   const hotLight = useRef<THREE.PointLight>(null);
+  const steel = useRef<THREE.MeshPhysicalMaterial>(null);
+  // A ref rather than useMemo: this uniform is written every frame, and the compiler's
+  // immutability rule (rightly) refuses mutation of a memoised value.
+  const time = useRef<THREE.IUniform<number>>({ value: 0 });
+
+  useEffect(() => {
+    if (steel.current) applyTemperShader(steel.current, time.current);
+  }, []);
 
   const geometry = useMemo(() => {
     const path = new THREE.CatmullRomCurve3(
@@ -65,6 +76,7 @@ function ForgedRibbon({ pointer }: { pointer: Pointer }) {
   }, []);
 
   useFrame((state, delta) => {
+    time.current.value += delta;
     if (!group.current) return;
     const pointerX = pointer.x.get();
     const pointerY = pointer.y.get();
@@ -77,15 +89,22 @@ function ForgedRibbon({ pointer }: { pointer: Pointer }) {
     }
   });
 
+  // Raised off centre so the arc grazes the top of the frame as it turns: the fixed header
+  // difference-blends against whatever is behind it, and that strip used to be empty.
   return (
-    <group ref={group} scale={0.86} position={[0.8, -0.2, 0]} rotation={[-0.18, -0.35, -0.13]}>
+    <group ref={group} scale={0.9} position={[0.8, 0.55, 0]} rotation={[-0.18, -0.35, -0.13]}>
       <mesh geometry={geometry} castShadow receiveShadow>
         <meshPhysicalMaterial
+          ref={steel}
           color="#61676a"
           metalness={0.94}
           roughness={0.29}
           clearcoat={0.18}
           clearcoatRoughness={0.62}
+          // Forged and milled stock has directional micro-grooves; highlights stretch across
+          // them rather than sitting as round points.
+          anisotropy={0.55}
+          anisotropyRotation={Math.PI * 0.5}
         />
         <Edges threshold={28} color="#b3b7b7" opacity={0.28} transparent />
       </mesh>
@@ -105,6 +124,12 @@ function ForgedRibbon({ pointer }: { pointer: Pointer }) {
   );
 }
 
+function ForgeEnvironment() {
+  const environment = useForgeEnvironment();
+  if (!environment) return null;
+  return <primitive object={environment} attach="environment" />;
+}
+
 export default function ForgeScene({ pointer, active = true, onReady }: ForgeSceneProps) {
   return (
     <Canvas
@@ -115,12 +140,16 @@ export default function ForgeScene({ pointer, active = true, onReady }: ForgeSce
       shadows
       onCreated={() => onReady?.()}
     >
-      <ambientLight intensity={0.42} color="#8b9296" />
+      <ForgeEnvironment />
+      {/* Pulled well back from 0.42: the environment now supplies the ambient term, and
+          leaving both in flattened the very reflections it was added to produce. */}
+      <ambientLight intensity={0.16} color="#8b9296" />
       <directionalLight position={[-5, 6, 6]} intensity={3.2} color="#e7edf0" castShadow />
       <directionalLight position={[4, -3, 4]} intensity={2.1} color="#435f87" />
       <spotLight position={[0, 7, -1]} intensity={52} color="#fff7e8" angle={0.22} penumbra={0.9} distance={16} />
       <ForgedRibbon pointer={pointer} />
       <CameraRig pointer={pointer} />
+      <ForgeAtmosphere />
     </Canvas>
   );
 }
