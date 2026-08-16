@@ -12,13 +12,24 @@ const links = [
   { href: "/#contact", id: "contact", label: "Contact" },
 ];
 
+/**
+ * The shorter (mobile) .nav-inner height. Used to shrink the observer root so the bar's
+ * wordmark only returns once the display title is genuinely behind the bar — erring to the
+ * smaller value keeps it standing down a few pixels longer rather than a few too few.
+ */
+const NAV_HEIGHT = 66;
+
 export function Navigation() {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState<string | null>(null);
+  const [condensed, setCondensed] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
   const pathname = usePathname();
+  // Starts true so the homepage never paints two wordmarks on the first frame; gated by the
+  // route below rather than reset here, since only the homepage renders a display title.
+  const [heroTitleVisible, setHeroTitleVisible] = useState(true);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -86,14 +97,47 @@ export function Navigation() {
     return () => observer.disconnect();
   }, [pathname]);
 
+  // Two DJUPPE wordmarks on screen at once is one too many, so the bar's copy stands down
+  // for as long as the hero is printing it at display size.
+  useEffect(() => {
+    const title = document.getElementById("hero-title");
+    if (!title) return;
+
+    const observer = new IntersectionObserver(([entry]) => setHeroTitleVisible(entry.isIntersecting), {
+      rootMargin: `-${NAV_HEIGHT}px 0px 0px 0px`,
+      threshold: 0,
+    });
+    observer.observe(title);
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  // The bar had no scroll state at all: identical at the top of the hero and 5000px down.
+  useEffect(() => {
+    function handleScroll() {
+      setCondensed(window.scrollY > NAV_HEIGHT);
+    }
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   // The section links point back to the homepage, so nothing is "current" while off it.
   const currentSection = pathname === "/" ? current : null;
+  // Only the homepage prints DJUPPE at display size, so only there does the bar stand down.
+  const wordmarkStandby = pathname === "/" && heroTitleVisible && !open;
 
   return (
     <>
-      <header className="nav">
+      <header className="nav" data-condensed={condensed ? "true" : undefined}>
         <div className="nav-inner container-wide">
-          <Link className="wordmark" href="/" aria-label="Djuppe, home">DJUPPE</Link>
+          <Link
+            className="wordmark"
+            href="/"
+            aria-label="Djuppe, home"
+            data-standby={wordmarkStandby ? "true" : undefined}
+          >
+            DJUPPE
+          </Link>
           <nav className="nav-links" aria-label="Primary navigation">
             {links.map((link) => (
               <Link key={link.href} href={link.href} aria-current={currentSection === link.id ? "location" : undefined}>
